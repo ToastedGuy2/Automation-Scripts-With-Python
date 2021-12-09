@@ -1,9 +1,7 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch, mock_open
-from requests import get
 from requests.models import Response
-from tempfile import TemporaryFile, mkstemp
-from platform import system
+from tempfile import TemporaryFile
 from helpers.file_helper import get_file_path
 import logic
 

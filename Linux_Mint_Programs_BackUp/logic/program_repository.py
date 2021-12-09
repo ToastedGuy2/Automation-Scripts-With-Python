@@ -1,5 +1,5 @@
 from mongoengine.connection import connect
-from models.program import Program
+from ..models.program import Program
 
 
 class ProgramRepository():

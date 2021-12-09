@@ -1,21 +1,21 @@
-import unittest
+from subprocess import call
+from unittest import TestCase
+from unittest.mock import MagicMock, patch, call
 from logic.terminal_installer import TerminalInstaller
 
 
-class TestTerminalInstaller(unittest.TestCase):
-    def test_concatenate_commands(self):
-        t = TerminalInstaller()
-        self.assertEqual('hello',
-                         t.concatenate_commands(['hello']))
-        self.assertEqual('hello && world',
-                         t.concatenate_commands(['hello', 'world']))
-        self.assertEqual(
-            'sudo apt-get update && sudo apt-get upgrade -y', t.concatenate_commands(['sudo apt-get update', 'sudo apt-get upgrade -y']))
-        self.assertEqual(
-            'my && name && is && toastedguy2', t.concatenate_commands(['my', 'name', 'is', 'toastedguy2']))
-
-    def test_get_final_commands(self):
-        t = TerminalInstaller()
-        expected = 'echo peel-shift-auto | sudo -S sudo apt-get update && sudo apt upgrade -y && sudo apt-get install unittest -y'
-        actual = t.get_final_command(['sudo apt-get install unittest -y'])
-        self.assertEqual(expected, actual)
+class TestTerminalInstaller(TestCase):
+    def test_install(self):
+        with patch('logic.terminal_installer.Installer.run_default_commands') as mock_run_default_commands, patch('logic.terminal_installer.run', MagicMock(return_value=0)) as mock_run:
+            t = TerminalInstaller()
+            command_1 = 'wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb'
+            command_2 = 'sudo dpkg -i packages-microsoft-prod.deb'
+            command_3 = 'rm packages-microsoft-prod.deb', 'sudo apt-get update; \
+                                                            sudo apt-get install -y apt-transport-https && \
+                                                            sudo apt-get update && \
+                                                            sudo apt-get install -y dotnet-sdk-6.0'
+            commands = [command_1, command_2, command_3]
+            t.install(commands)
+            mock_run_default_commands.assert_called_once()
+            mock_run.assert_has_calls(
+                [call(command_1), call(command_2), call(command_3)])
