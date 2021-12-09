@@ -1,5 +1,5 @@
-from models.extension import Extension
-from models.program import Program
+from .extension import Extension
+from .program import Program
 from mongoengine.fields import EnumField, StringField
 
 

@@ -6,12 +6,12 @@ from models.webscrap_commands_from_docs import WebScrap_Fetch_Commands
 from logic.terminal_installer import TerminalInstaller
 from models.extension import Extension
 from logic.web_scrapper import WebScrapper
-from logic.downloader import download_file
 from logic.deb_installer import DebInstaller
 from logic.app_image_installer import AppImageInstaller
 from logic.tar_xz_installer import TarXzInstaller
-from helpers.file_helper import get_filename
 from logic.program_repository import ProgramRepository
+from logic.downloader import download_file
+from helpers.file_helper import get_filename
 os = system()
 if os == 'Linux':
     programs_queue = Queue()

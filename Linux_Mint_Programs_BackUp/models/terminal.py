@@ -1,4 +1,4 @@
-from models.program import Program
+from .program import Program
 from mongoengine.fields import ListField, StringField
 
 
