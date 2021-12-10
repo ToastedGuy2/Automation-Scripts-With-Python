@@ -9,4 +9,4 @@ class DebInstaller(FileInstaller):
         self.install_command = f'{self.deb_install_command} {self.file_path}'
 
     def install(self):
-        run(self.install_command)
+        run(self.install_command, shell=True, check=True)

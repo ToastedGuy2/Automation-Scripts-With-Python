@@ -17,7 +17,7 @@ class TarXzInstaller(FileInstaller):
         self.desktop_file_template = f"[Desktop Entry]\nType = Application\nName = {appname}\nIcon = PATH_TO_ICON\nExec = PATH_TO_APP"
 
     def unzip_file(self) -> str:
-        run(f'{self.unzip_command} {self.file_path}')
+        run(f'{self.unzip_command} {self.file_path}', shell=True, check=True)
 
     def get_subdirectories_from_downloads(self) -> List[str]:
         return list(filter(listdir(self.download_directory), lambda d: isdir(

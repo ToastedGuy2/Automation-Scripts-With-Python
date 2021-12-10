@@ -1,5 +1,5 @@
 from requests import get
-from ..helpers.file_helper import get_file_path
+from helpers.file_helper import get_file_path
 
 
 def download_file(url: str, filename: str):

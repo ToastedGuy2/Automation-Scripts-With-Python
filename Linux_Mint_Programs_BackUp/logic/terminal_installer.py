@@ -10,4 +10,4 @@ class TerminalInstaller(Installer):
     def install(self, commands: List[str]):
         self.run_default_commands()
         for command in commands:
-            run(command)
+            run(command, shell=True, check=True)

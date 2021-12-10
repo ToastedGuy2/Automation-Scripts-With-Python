@@ -1,4 +1,4 @@
-from ..models.extension import Extension
+from models.extension import Extension
 from os.path import expanduser, join
 
 

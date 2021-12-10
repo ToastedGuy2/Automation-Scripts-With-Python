@@ -15,4 +15,5 @@ class AppImageInstaller(FileInstaller):
         # Move file from downloads to desktop
         move(self.file_path, self.desktop_directory)
         # Grant file executable permissions
-        run(f'{self.grant_executable_rights_command} {self.file_desktop_path}')
+        run(f'{self.grant_executable_rights_command} {self.file_desktop_path}',
+            shell=True, check=True)

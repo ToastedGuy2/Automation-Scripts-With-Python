@@ -10,4 +10,4 @@ class Installer():
         self.default_command = f'{self.authentication_command} {self.update_command} && {self.upgrade_command}'
 
     def run_default_commands(self) -> int:
-        return run(self.default_command, check=True)
+        return run(self.default_command, shell=True, check=True)
