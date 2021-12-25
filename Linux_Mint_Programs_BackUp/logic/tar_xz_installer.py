@@ -17,23 +17,26 @@ class TarXzInstaller(FileInstaller):
         self.desktop_file_template = f"[Desktop Entry]\nType = Application\nName = {appname}\nIcon = PATH_TO_ICON\nExec = PATH_TO_APP"
 
     def unzip_file(self) -> str:
-        run(f'{self.unzip_command} {self.file_path}', shell=True, check=True)
+        run(f"{self.unzip_command} '{self.file_path}'", shell=True, check=True)
 
     def get_subdirectories_from_downloads(self) -> List[str]:
-        return list(filter(listdir(self.download_directory), lambda d: isdir(
-            join(self.download_directory, d))))
+        dir_tree = listdir(self.download_directory)
+        return list(filter(lambda d: isdir(
+            join(self.download_directory, d)),dir_tree ))
 
     def get_subdirectories_details_from_downloads(self) -> List[dict]:
-        return list(map(self.get_subdirectories_from_downloads(), lambda d: {'name': dir, 'path': join(self.download_directory, d), 'modified_date': getmtime(join(self.download_directory, d))}))
+        return list(map(lambda d: {'name': d, 'path': join(self.download_directory, d), 'modified_date': getmtime(join(self.download_directory, d))},self.get_subdirectories_from_downloads()))
 
     def get_extracted_file(self) -> str:
-        dirs = self.get_subdirectories_details_from_downloads.sort(
+        sub_dirs = self.get_subdirectories_details_from_downloads()
+        sub_dirs.sort(
             reverse=True, key=lambda d: d['modified_date'])
-        return dirs[0]
+        return sub_dirs[0]
 
     def move_file_from_downloads_to_opt(self):
         extracted_file = self.get_extracted_file()
         source = join(self.download_directory, extracted_file['name'])
+        # TODO: USE TERMINAL - RUN
         move(source, self.opt_directory)
 
     def find_icon_path(self):

@@ -3,7 +3,7 @@ from os.path import expanduser, join
 
 
 def get_filename(name: str, ext: Extension) -> str:
-    return name + ext.value
+    return name + ext
 
 
 def get_file_path(filename: str) -> str:

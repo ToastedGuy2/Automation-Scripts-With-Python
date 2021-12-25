@@ -20,10 +20,11 @@ if os == 'Linux':
         programs_queue.put(program)
     while(programs_queue.qsize() > 0):
         program = programs_queue.get()
-        if isinstance(program, Terminal):
-            t = TerminalInstaller()
-            t.install(program.commands)
-        elif isinstance(program, WebScrap_Fetch_Link):
+        # if isinstance(program, Terminal):
+        #     t = TerminalInstaller()
+        #     t.install(program.commands)
+        # elif isinstance(program, WebScrap_Fetch_Link):
+        if isinstance(program, WebScrap_Fetch_Link):
             ext = program.ext.value
             filename = get_filename(program.name, ext)
             w = WebScrapper()
@@ -32,10 +33,10 @@ if os == 'Linux':
             if ext == Extension.DEB.value:
                 deb = DebInstaller(filename)
                 deb.install()
-            elif ext == Extension.APPIMAGE:
+            elif ext == Extension.APPIMAGE.value:
                 a = AppImageInstaller(filename)
                 a.install()
-            elif ext == Extension.TAR_XZ:
+            elif ext == Extension.TAR_XZ.value:
                 tar_xz = TarXzInstaller(filename, program.name)
                 tar_xz.install()
         elif isinstance(program, WebScrap_Fetch_Commands):
