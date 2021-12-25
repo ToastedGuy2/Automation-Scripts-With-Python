@@ -17,7 +17,7 @@ class TarXzInstaller(FileInstaller):
         self.desktop_file_template = f"[Desktop Entry]\nType = Application\nName = {appname}\nIcon = PATH_TO_ICON\nExec = PATH_TO_APP"
 
     def unzip_file(self) -> str:
-        run(f"{self.unzip_command} '{self.file_path}'", shell=True, check=True)
+        run(f"{self.unzip_command} '{self.file_path}' -C {self.download_directory} --checkpoint=.100", shell=True, check=True)
 
     def get_subdirectories_from_downloads(self) -> List[str]:
         dir_tree = listdir(self.download_directory)
@@ -36,8 +36,7 @@ class TarXzInstaller(FileInstaller):
     def move_file_from_downloads_to_opt(self):
         extracted_file = self.get_extracted_file()
         source = join(self.download_directory, extracted_file['name'])
-        # TODO: USE TERMINAL - RUN
-        move(source, self.opt_directory)
+        run(f"sudo cp -r {source} {self.opt_directory} && rm -R {source}", shell=True, check=True)
 
     def find_icon_path(self):
         look_into = join(self.opt_directory, self.get_extracted_file()['name'])
@@ -54,7 +53,8 @@ class TarXzInstaller(FileInstaller):
                     return join(root, file)
 
     def create_desktop_shortcut(self):
-        with open(join(self.desktop_shortcuts_directory, self.appname + '.desktop'), 'w') as f:
+        desktop_file_path_from_downloads = join(self.download_directory, self.appname + '.desktop')
+        with open(desktop_file_path_from_downloads, 'w') as f:
             icon = self.find_icon_path()
             exec = self.find_executable_path()
             self.desktop_file_template = self.desktop_file_template.replace(
@@ -62,6 +62,7 @@ class TarXzInstaller(FileInstaller):
             self.desktop_file_template = self.desktop_file_template.replace(
                 'PATH_TO_APP', exec)
             f.write(self.desktop_file_template)
+        run(f"mv {desktop_file_path_from_downloads} {self.desktop_shortcuts_directory}")
 
     def install(self):
         self.unzip_file()
